@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.net.URI;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -395,16 +394,18 @@ public class PageCluster {
 			System.err.print("usage : java -jar ***.jar [k] [maxIterations] [Input path] [Output path]");
 			System.exit(2);
 		}
-		String local_dict = "./src/word.txt";
-		String local_stopdict = "./src/stopword";
+		/*String local_dict = "./bin/resource/word.txt";
+		String local_stopdict = "./bin/resource/stopword";*/
+		Resource picker = new Resource();
 		String dst_dict = "/tmp/try/word.txt";
 		String dst_stopdict = "/tmp/try/stopword.txt";
-		InputStream in = new BufferedInputStream(new FileInputStream(local_dict));
-		InputStream in2 = new BufferedInputStream(new FileInputStream(local_stopdict));
+		InputStream in = new BufferedInputStream(picker.getResouce("word.txt"));
+		InputStream in2 = new BufferedInputStream(picker.getResouce("stopword"));
 		
 		Configuration conf = new Configuration();
 		
 		FileSystem fs = FileSystem.get(URI.create(dst_dict), conf);
+		fs.delete(new Path("/tmp/try"), true);
 		OutputStream out = fs.create(new Path(dst_dict));
 		IOUtils.copyBytes(in, out, 4096, true);
 		fs = FileSystem.get(URI.create(dst_stopdict), conf);
