@@ -1,8 +1,10 @@
-import java.util.*;
-import java.io.*;
-import java.lang.Character;
+import java.util.TreeSet;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class Separator {
+  private static int is_init = 0;
   static BufferedReader TextReader;
   static StringTokenizer tokenizer;
   static TreeSet<String> dictionary;
@@ -26,37 +28,37 @@ public class Separator {
     return c >= '0' && c <= '9';
   }
 
-  public static void InitialDictionary() 
-    throws IOException {
-    try {
-      String path = "./dict/word.txt";
-      TextReader = new BufferedReader(new FileReader(new File(path)));
-      tokenizer = null;
-      dictionary = new TreeSet<String>();
-      dictionary.clear();
-      String buf;
-      while (true) {
-        buf = nextToken();
-        dictionary.add(buf);
-      }
-    }
-    catch (Exception e) {
-    }
-
-    try {
-      String path = "./dict/stopword.txt";
-      TextReader = new BufferedReader(new FileReader(new File(path)));
-      tokenizer = null;
-      StopWordDictionary = new TreeSet<String>();
-      StopWordDictionary.clear();
-      String buf;
-      while (true) {
-        buf = nextToken();
-        StopWordDictionary.add(buf);
-      }
-    }
-    catch (Exception e) {
-    }
+  public static void InitialDictionary(BufferedReader word_reader, BufferedReader stopword_reader) {
+	 if (is_init == 0) {
+		 is_init = 1;
+	    try {
+	      TextReader = word_reader;
+	      tokenizer = null;
+	      dictionary = new TreeSet<String>();
+	      dictionary.clear();
+	      String buf;
+	      while (true) {
+	        buf = nextToken();
+	        dictionary.add(buf);
+	      }
+	    }
+	    catch (Exception e) {
+	    }
+	
+	    try {
+	      TextReader = stopword_reader;
+	      tokenizer = null;
+	      StopWordDictionary = new TreeSet<String>();
+	      StopWordDictionary.clear();
+	      String buf;
+	      while (true) {
+	        buf = nextToken();
+	        StopWordDictionary.add(buf);
+	      }
+	    }
+	    catch (Exception e) {
+	    }
+	 }
   }
 
   public static String InvertMaximumMatching(String Text) {
@@ -129,23 +131,6 @@ public class Separator {
     return result;
   }
 
-  public static void main(String [] args) 
-    throws IOException {
-    String Text = "";
-//    try {
-//      String path = "./test.in";
-//      TextReader = new BufferedReader(new FileReader(new File(path)));
-//      tokenizer = null;
-//      while (true) {
-//        Text += nextToken();
-//      }
-//    }
-//    catch (Exception e) {
-//    }
-    InitialDictionary();
-    System.out.println(Split("我是第一个"));
-  }
-
   public static String nextToken() 
     throws IOException {
     while (tokenizer == null || !tokenizer.hasMoreTokens()) {
@@ -153,4 +138,5 @@ public class Separator {
     }
     return tokenizer.nextToken();
   }
+
 }
